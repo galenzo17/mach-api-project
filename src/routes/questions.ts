@@ -3,7 +3,9 @@ const router = Router();
 
 import { questionList,questionAdd } from '../controllers/questions'
 
+  
 router.post('/addCommonQuestion', questionAdd);
-router.get('/', questionList)
 
+router.get('/list', questionList)
+router.get('/', questionList)
 export default router;
