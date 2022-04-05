@@ -1,4 +1,4 @@
-Esta es una Api no oficial, solo demostrativa realizada en typescript 
+Esta es una Api no oficial, solo demostrativa realizada en typescript-node-express 
 para ejecutar este proyecto se debe correr en la terminal los siguientes comandos:<br />
 npm install<br />
 npm run dev<br />
