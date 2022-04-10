@@ -1,0 +1,50 @@
+version: '3.8'
+services:
+  api:
+    container_name: agus-api
+    restart: on-failure
+    build: .
+    volumes:
+      - ./src:/app
+  mongo:
+    image: mongo
+    restart: always
+    container_name: mongo-server
+    ports:
+      - 27017:27017
+    environment:
+            # creating a database when container is initialised
+            MONGO_INITDB_DATABASE: defaultDB
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: example
+    networks: 
+      - mongo-compose-network
+    volumes:
+            - ./data:/data/db 
+  demo-app:
+        build:
+                context: .
+                dockerfile: Dockerfile
+        depends_on:
+                - mongo
+        volumes:
+                #Use the local app folder, but use a named volume for node_modules. This avoids conflicts with the local system.
+                - ./data:/data/db 
+        networks: 
+          - mongo-compose-network
+        restart: always
+        ports:
+                - 3000:3000
+        environment:
+              ME_CONFIG_MONGODB_SERVER: mongo-server
+              ME_CONFIG_MONGODB_ADMINUSERNAME: root
+              ME_CONFIG_MONGODB_ADMINPASSWORD: example
+              MONGODB_URI: mongodb://root:example@mongo-server:27017/defaultDB?authSource=admin
+        command: "node dist/app.js"
+volumes:
+  #Configure shared volumes to be used in the services above.
+  mongo-db:
+  mongo-configdb:
+networks:
+  mongo-compose-network:
+    driver: bridge

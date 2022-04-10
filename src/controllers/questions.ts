@@ -5,8 +5,9 @@ import { signupValidation, signinValidation } from '../libs/joi'
 import jwt from 'jsonwebtoken';
 
 export const questionList = async (req: Request, res: Response) => {
+    console.log('questionList',process.env.MONGODB_URI )
     const questions = await Question.find()
-    res.json({"questions": questions})
+    res.status(200).json({"questions": questions})
 };
 
 export const questionAdd = async (req: Request, res: Response) => {
@@ -17,5 +18,5 @@ export const questionAdd = async (req: Request, res: Response) => {
         commonQ: req.body.commonQ
     });
     await question.save();
-    res.json(question);
+    res.status(201).json(question);
 };
